@@ -1,10 +1,69 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-<h:head>
-  <title>SheaSepherd</title>
-</h:head>
-<h:body>
-</h:body>
-</html>
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pt="http://java.sun.com/jsf/core">
+<ui:composition template="baseTemplate.xhtml">
+  <ui:define name="content">
+    <div class="container container-fluid">
+      <h:outputLabel class="shea-sepherd-color-font-primary h3" value="Reporting"/>
+      <h:form>
+        <div class="row">
+          <div class="col">
+            <h:outputLabel class="shea-sepherd-color-font-primary h6" value="Ghost net"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h:outputLabel value="Latitude (-90.0000 to 90.0000)*" for="latitude"/>
+            <h:inputText id="latitude" value="#{ghostNetController.latitude}" class="form-control"/>
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col">
+            <h:outputLabel value="Longitude (-180.0000 to 180.0000)*" for="longitude"/>
+            <h:inputText id="longitude" value="#{ghostNetController.longitude}" class="form-control"/>
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col">
+            <h:outputLabel value="Size (m²)*" for="size"/>
+            <h:inputText id="size" value="#{ghostNetController.size}" class="form-control"
+                         pt:type="number" pt:min="1" pt:max="200000" pt:step="1"/>
+          </div>
+        </div>
 
+        <c:choose>
+        <c:when test="#{loginController.loggedIn}">
+          <h:outputLabel class="form-text" value="*Pflichtfeld"/>
+          <h:commandButton class="btn btn-primary mt-2 w-100" value="Report" action="#{ghostNetController.addGhostNetAsRecoveringPerson}"/>
+        </c:when>
+          <c:otherwise>
+            <div class="mt-4">
+              <div class="row">
+                <div class="col">
+                  <h:outputLabel class="shea-sepherd-color-font-primary h6" value="Personal information"/>
+                </div>
+              </div>
+              <div class="row mt-1">
+                <div class="col">
+                  <h:outputLabel value="Name*" for="name"/>
+                  <h:inputText id="name" value="#{ghostNetController.name}" class="form-control"/>
+                </div>
+              </div>
+              <div class="row mt-1">
+                <div class="col">
+                  <h:outputLabel value="Phone number" for="phoneNumber"/>
+                  <h:inputText id="phoneNumber" value="#{ghostNetController.phoneNumber}" class="form-control"/>
+                </div>
+              </div>
+
+              <h:outputLabel class="form-text" value="*Pflichtfeld"/>
+              <h:commandButton class="btn btn-primary mt-2 w-100" value="Report" action="#{ghostNetController.addGhostNetAsReportingPerson}"/>
+            </div>
+          </c:otherwise>
+        </c:choose>
+      </h:form>
+    </div>
+  </ui:define>
+</ui:composition>
+</html>

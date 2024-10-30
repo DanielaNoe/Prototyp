@@ -1,0 +1,12 @@
+:root {
+  --shea-sepherd-color-primary: #88b0db;
+  --shea-sepherd-color-secondary: #cce5ff;
+}
+
+.shea-sepherd-color-font-primary {
+  color: var(--shea-sepherd-color-primary) !important;
+}
+
+.shea-sepherd-color-bg-secondary {
+  background-color: var(--shea-sepherd-color-secondary) !important;
+}
