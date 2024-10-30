@@ -64,7 +64,7 @@ public class RecoveringPersonController implements Serializable {
         this.recoveringPersonDAO.addRecoveringPerson(
                 new RecoveringPerson(this.name, this.phoneNumber, this.portal.hashPassword(this.password))
         );
-        this.messageService.addMessage(new Message("Registration successful!!", MessageType.SUCCESS));
+
         return this.navigationService.getLoginPage();
     }
 

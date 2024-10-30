@@ -1,4 +1,5 @@
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -7,6 +8,9 @@ import jakarta.persistence.Persistence;
 @Named
 @ApplicationScoped
 public class ReportingPersonDAO {
+
+    @Inject
+    MessageService messageService;
 
     private EntityManager entityManager;
 

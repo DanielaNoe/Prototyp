@@ -5,6 +5,7 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Named
 @ViewScoped
@@ -36,6 +37,7 @@ public class GhostNetController implements Serializable {
     private String phoneNumber;
 
     private List<GhostNet> reportedGhostNets = new ArrayList<>();
+    private List<GhostNet> recoveringAnnouncedGhostNets = new ArrayList<>();
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -82,6 +84,10 @@ public class GhostNetController implements Serializable {
         return reportedGhostNets = this.ghostNetDAO.getReportedGhostNets();
     }
 
+    public List<GhostNet> getRecoveringAnnouncedGhostNets() {
+        return recoveringAnnouncedGhostNets = this.ghostNetDAO.getRecoveringAnnouncedGhostNets();
+    }
+
     public String addGhostNetAsRecoveringPerson() {
         if (!this.validateInputFieldsGhostNet()) {
             return this.navigationService.stayOnPage();
@@ -90,8 +96,6 @@ public class GhostNetController implements Serializable {
         this.ghostNetDAO.addGhostNet(
                 new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED, this.currentApplicationUser.getRecoveringPerson())
         );
-
-        this.messageService.addMessage(new Message("Ghost net reported successfully!", MessageType.SUCCESS));
         return this.navigationService.getReportingPage();
     }
 
@@ -107,12 +111,15 @@ public class GhostNetController implements Serializable {
         this.ghostNetDAO.addGhostNet(
                 new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED, person)
         );
-
-        this.messageService.addMessage(new Message("Ghost net reported successfully!", MessageType.SUCCESS));
         return this.navigationService.getReportingPage();
     }
 
-    public void announceRecovering() {
+    public String announceRecovering(UUID uuid) {
+        this.ghostNetDAO.announceRecovering(uuid);
+        return this.navigationService.getPortalPage();
+    }
+
+    public void announceRecovered(UUID uuid) {
         // TODO: implement
     }
 
