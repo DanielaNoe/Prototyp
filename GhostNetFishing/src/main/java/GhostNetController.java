@@ -3,6 +3,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Named
 @ViewScoped
@@ -32,6 +34,8 @@ public class GhostNetController implements Serializable {
 
     private String name;
     private String phoneNumber;
+
+    private List<GhostNet> reportedGhostNets = new ArrayList<>();
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -73,6 +77,11 @@ public class GhostNetController implements Serializable {
         this.latitude = latitude;
     }
 
+
+    public List<GhostNet> getReportedGhostNets() {
+        return reportedGhostNets = this.ghostNetDAO.getReportedGhostNets();
+    }
+
     public String addGhostNetAsRecoveringPerson() {
         if (!this.validateInputFieldsGhostNet()) {
             return this.navigationService.stayOnPage();
@@ -101,6 +110,10 @@ public class GhostNetController implements Serializable {
 
         this.messageService.addMessage(new Message("Ghost net reported successfully!", MessageType.SUCCESS));
         return this.navigationService.getReportingPage();
+    }
+
+    public void announceRecovering() {
+        // TODO: implement
     }
 
     public String goToGhostNetReporting() {
