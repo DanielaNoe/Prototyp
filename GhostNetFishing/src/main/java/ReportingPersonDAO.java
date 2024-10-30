@@ -14,7 +14,7 @@ public class ReportingPersonDAO {
         try {
             this.entityManager = Persistence.createEntityManagerFactory("ghost-net-fishing").createEntityManager();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -27,7 +27,7 @@ public class ReportingPersonDAO {
             transaction.commit();
             return person;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

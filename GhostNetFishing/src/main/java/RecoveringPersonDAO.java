@@ -19,7 +19,7 @@ public class RecoveringPersonDAO {
             this.entityManager = Persistence.createEntityManagerFactory("ghost-net-fishing").createEntityManager();
             this.criteriaBuilder = this.entityManager.getCriteriaBuilder();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -31,7 +31,7 @@ public class RecoveringPersonDAO {
             this.entityManager.persist(person);
             transaction.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -45,7 +45,8 @@ public class RecoveringPersonDAO {
         try {
             return entityManager.createQuery(query).setMaxResults(1).getSingleResult();
         } catch (Exception e) {
-            return null;
+            System.err.println("Fehler: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }
