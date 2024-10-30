@@ -16,6 +16,9 @@ public class Person {
     @OneToMany(mappedBy = "reportedBy")
     private List<GhostNet> reportedGhostNets;
 
+    @OneToMany(mappedBy = "recoveringAnnouncedBy")
+    private List<GhostNet> recoveringAnnouncedGhostNets;
+
 
     public Person() {
     }
@@ -46,5 +49,13 @@ public class Person {
 
     public void setReportedGhostNets(List<GhostNet> reportedGhostNets) {
         this.reportedGhostNets = reportedGhostNets;
+    }
+
+    public List<GhostNet> getRecoveringAnnouncedGhostNets() {
+        return recoveringAnnouncedGhostNets;
+    }
+
+    public void setRecoveringAnnouncedGhostNets(List<GhostNet> recoveringAnnouncedGhostNets) {
+        this.recoveringAnnouncedGhostNets = recoveringAnnouncedGhostNets;
     }
 }
