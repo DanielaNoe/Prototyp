@@ -77,8 +77,22 @@
                             <div class="text-center rounded bg-success-subtle pt-2 pb-1 mt-1">
                                 <h:outputLabel class="shea-sepherd-color-font-primary h6" value="Ghost Nets I recovered"/>
                             </div>
-                            <div>
-                                <!--TODO: add cards-->
+                            <div class="p-2 mt-2 mb-3">
+                                <h:form>
+                                    <c:forEach items="#{ghostNetController.recoveredGhostNets}" var="ghostnet">
+                                        <div class="card mt-1 ms-1 me-1 bg-success-subtle border-0">
+                                            <div class="card-body">
+                                                <div class="d-flex">
+                                                    <div class="w-75">
+                                                        <div><h:outputText class="card-title h5" value="#{ghostnet.size} m²"/></div>
+                                                        <div><h:outputText class="card-text" value="Latitude: #{ghostnet.latitude}"/></div>
+                                                        <div><h:outputText class="card-text mb-2" value="Longitude: #{ghostnet.longitude}"/></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </h:form>
                             </div>
                         </div>
                         <div class="flex-fill">
