@@ -52,26 +52,11 @@ public class GhostNetDAO {
         }
     }
 
-    public List<GhostNet> getGhostNetsByStatus(GhostNetStatus status) {
+    public void changeGhostNetStatus(UUID ghostNetId, GhostNetStatus status) {
         CriteriaQuery<GhostNet> query = criteriaBuilder.createQuery(GhostNet.class);
         Root<GhostNet> root = query.from(GhostNet.class);
 
-        query.select(root).where(criteriaBuilder.equal(root.get("status"), status))
-                .orderBy(criteriaBuilder.desc(root.get("size")));
-
-        try {
-            return entityManager.createQuery(query).getResultList();
-        } catch (Exception e) {
-            System.err.println("Fehler: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void changeGhostNetStatus(UUID uuid, GhostNetStatus status) {
-        CriteriaQuery<GhostNet> query = criteriaBuilder.createQuery(GhostNet.class);
-        Root<GhostNet> root = query.from(GhostNet.class);
-
-        query.select(root).where(criteriaBuilder.equal(root.get("ghostNetId"), uuid));
+        query.select(root).where(criteriaBuilder.equal(root.get("ghostNetId"), ghostNetId));
 
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -80,7 +65,23 @@ public class GhostNetDAO {
             GhostNet ghostNet = entityManager.createQuery(query).setMaxResults(1).getSingleResult();
 
             ghostNet.setStatus(status);
-            ghostNet.setRecoveringAnnouncedBy(this.currentApplicationUser.getRecoveringPerson());
+
+            switch(status) {
+                case REPORTED:
+                    ghostNet.setReportedBy(this.currentApplicationUser.getRecoveringPerson());
+                    break;
+                case RECOVERING_ANNOUNCED:
+                    ghostNet.setRecoveringAnnouncedBy(this.currentApplicationUser.getRecoveringPerson());
+                    break;
+                case RECOVERED:
+                    ghostNet.setRecoveredBy(this.currentApplicationUser.getRecoveringPerson());
+                    ghostNet.setRecoveringAnnouncedBy(null);
+                    break;
+                case LOST:
+                    ghostNet.setAnnouncesLostBy(this.currentApplicationUser.getRecoveringPerson());
+                    //TODO: aus der Liste der want to recover löschen, FALLS das der Fall war
+                    break;
+            }
 
             transaction.commit();
 
@@ -94,6 +95,54 @@ public class GhostNetDAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
+            System.err.println("Fehler: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<GhostNet> getAllReportedGhostNets() {
+        CriteriaQuery<GhostNet> query = criteriaBuilder.createQuery(GhostNet.class);
+        Root<GhostNet> root = query.from(GhostNet.class);
+
+        query.select(root).where(criteriaBuilder.equal(root.get("status"), GhostNetStatus.REPORTED))
+                .orderBy(criteriaBuilder.desc(root.get("size")));
+
+        try {
+            return entityManager.createQuery(query).getResultList();
+        } catch (Exception e) {
+            System.err.println("Fehler: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<GhostNet> getGhostNetsByStatusAndUserId(GhostNetStatus status, UUID userId) {
+        CriteriaQuery<GhostNet> query = criteriaBuilder.createQuery(GhostNet.class);
+        Root<GhostNet> root = query.from(GhostNet.class);
+
+        switch(status) {
+            case RECOVERING_ANNOUNCED:
+                query.select(root).where(criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get("status"), status),
+                                criteriaBuilder.equal(root.get("recoveringAnnouncedBy").get("userId"), userId)))
+                        .orderBy(criteriaBuilder.desc(root.get("size")));
+                break;
+            case RECOVERED:
+                query.select(root).where(criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get("status"), status),
+                                criteriaBuilder.equal(root.get("recoveredBy").get("userId"), userId)))
+                        .orderBy(criteriaBuilder.desc(root.get("size")));
+                break;
+            case LOST:
+                query.select(root).where(criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get("status"), status),
+                                criteriaBuilder.equal(root.get("announcesLostBy").get("userId"), userId)))
+                        .orderBy(criteriaBuilder.desc(root.get("size")));
+                break;
+        }
+
+        try {
+            return entityManager.createQuery(query).getResultList();
+        } catch (Exception e) {
             System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }

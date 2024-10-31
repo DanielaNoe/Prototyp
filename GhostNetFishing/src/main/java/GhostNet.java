@@ -27,7 +27,15 @@ public class GhostNet {
 
     @ManyToOne
     @JoinColumn(name = "recoveringAnnouncedUserId")
-    private Person recoveringAnnouncedBy;
+    private RecoveringPerson recoveringAnnouncedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "recoveringUserId")
+    private RecoveringPerson recoveredBy;
+
+    @ManyToOne
+    @JoinColumn(name = "announcedLostUserId")
+    private RecoveringPerson announcesLostBy;
 
 
     public GhostNet() {
@@ -89,11 +97,27 @@ public class GhostNet {
         this.reportedBy = reportedBy;
     }
 
-    public Person getRecoveringAnnouncedBy() {
+    public RecoveringPerson getRecoveringAnnouncedBy() {
         return recoveringAnnouncedBy;
     }
 
-    public void setRecoveringAnnouncedBy(Person recoveringAnnouncedBy) {
+    public void setRecoveringAnnouncedBy(RecoveringPerson recoveringAnnouncedBy) {
         this.recoveringAnnouncedBy = recoveringAnnouncedBy;
+    }
+
+    public RecoveringPerson getRecoveredBy() {
+        return recoveredBy;
+    }
+
+    public void setRecoveredBy(RecoveringPerson recoveredBy) {
+        this.recoveredBy = recoveredBy;
+    }
+
+    public RecoveringPerson getAnnouncesLostBy() {
+        return announcesLostBy;
+    }
+
+    public void setAnnouncesLostBy(RecoveringPerson announcesLostBy) {
+        this.announcesLostBy = announcesLostBy;
     }
 }

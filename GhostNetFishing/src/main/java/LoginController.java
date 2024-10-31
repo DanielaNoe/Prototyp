@@ -1,7 +1,9 @@
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 @Named
@@ -82,6 +84,15 @@ public class LoginController implements Serializable {
 
     public String toLoginPage() {
         return this.navigationService.getLoginPage();
+    }
+
+    public void redirectToLoginPage() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(this.navigationService.getLoginPage());
+        } catch (IOException e) {
+            System.err.println("Fehler: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     private boolean validateInputFields() {
