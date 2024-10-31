@@ -1,5 +1,4 @@
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -8,9 +7,6 @@ import jakarta.persistence.Persistence;
 @Named
 @ApplicationScoped
 public class ReportingPersonDAO {
-
-    @Inject
-    MessageService messageService;
 
     private EntityManager entityManager;
 
@@ -24,13 +20,16 @@ public class ReportingPersonDAO {
     }
 
     public ReportingPerson addReportingPerson(ReportingPerson person) {
+        EntityTransaction transaction = this.entityManager.getTransaction();
         try {
-            EntityTransaction transaction = this.entityManager.getTransaction();
             transaction.begin();
             this.entityManager.persist(person);
             transaction.commit();
             return person;
         } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
             System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }

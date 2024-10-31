@@ -36,24 +36,27 @@ public class GhostNetDAO {
     }
 
     public void addGhostNet(GhostNet ghostNet) {
+        EntityTransaction transaction = this.entityManager.getTransaction();
         try {
-            EntityTransaction transaction = this.entityManager.getTransaction();
             transaction.begin();
             this.entityManager.persist(ghostNet);
             transaction.commit();
 
             this.messageService.addMessage(new Message("Ghost net reported successfully!", MessageType.SUCCESS));
         } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
             System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    public List<GhostNet> getReportedGhostNets() {
+    public List<GhostNet> getGhostNetsByStatus(GhostNetStatus status) {
         CriteriaQuery<GhostNet> query = criteriaBuilder.createQuery(GhostNet.class);
         Root<GhostNet> root = query.from(GhostNet.class);
 
-        query.select(root).where(criteriaBuilder.equal(root.get("status"), GhostNetStatus.REPORTED))
+        query.select(root).where(criteriaBuilder.equal(root.get("status"), status))
                 .orderBy(criteriaBuilder.desc(root.get("size")));
 
         try {
@@ -64,43 +67,33 @@ public class GhostNetDAO {
         }
     }
 
-    public List<GhostNet> getRecoveringAnnouncedGhostNets() {
+    public void changeGhostNetStatus(UUID uuid, GhostNetStatus status) {
         CriteriaQuery<GhostNet> query = criteriaBuilder.createQuery(GhostNet.class);
         Root<GhostNet> root = query.from(GhostNet.class);
 
-        query.select(root).where(criteriaBuilder.equal(root.get("status"), GhostNetStatus.RECOVERING_ANNOUNCED))
-                .orderBy(criteriaBuilder.desc(root.get("size")));
+        query.select(root).where(criteriaBuilder.equal(root.get("ghostNetId"), uuid));
 
+        EntityTransaction transaction = entityManager.getTransaction();
         try {
-            return entityManager.createQuery(query).getResultList();
-        } catch (Exception e) {
-            System.err.println("Fehler: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void announceRecovering(UUID uuid) {
-        CriteriaQuery<GhostNet> query = criteriaBuilder.createQuery(GhostNet.class);
-        Root<GhostNet> root = query.from(GhostNet.class);
-
-        query.select(root).where(criteriaBuilder.equal(root.get("status"), GhostNetStatus.REPORTED))
-                .orderBy(criteriaBuilder.desc(root.get("size")));
-
-        try {
-            EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
 
             GhostNet ghostNet = entityManager.createQuery(query).setMaxResults(1).getSingleResult();
 
-            ghostNet.setStatus(GhostNetStatus.RECOVERING_ANNOUNCED);
+            ghostNet.setStatus(status);
             ghostNet.setRecoveringAnnouncedBy(this.currentApplicationUser.getRecoveringPerson());
 
             transaction.commit();
 
-            this.messageService.addMessage(new Message("Ghost net recovery successfully announced!", MessageType.SUCCESS));
+            this.messageService.addMessage(new Message("Ghost net status changed successfully!", MessageType.SUCCESS));
         } catch (NoResultException e) {
             this.messageService.addMessage(new Message("Ghost net not found!", MessageType.FAILURE));
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
         } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
             System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }

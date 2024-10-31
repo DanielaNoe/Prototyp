@@ -30,14 +30,17 @@ public class RecoveringPersonDAO {
     }
 
     public void addRecoveringPerson(RecoveringPerson person) {
+        EntityTransaction transaction = this.entityManager.getTransaction();
         try {
-            EntityTransaction transaction = this.entityManager.getTransaction();
             transaction.begin();
             this.entityManager.persist(person);
             transaction.commit();
 
             this.messageService.addMessage(new Message("Registration successful!!", MessageType.SUCCESS));
         } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
             System.err.println("Fehler: " + e.getMessage());
             throw new RuntimeException(e);
         }

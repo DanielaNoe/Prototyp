@@ -38,6 +38,7 @@ public class GhostNetController implements Serializable {
 
     private List<GhostNet> reportedGhostNets = new ArrayList<>();
     private List<GhostNet> recoveringAnnouncedGhostNets = new ArrayList<>();
+    private List<GhostNet> recoveredGhostNets = new ArrayList<>();
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -81,11 +82,15 @@ public class GhostNetController implements Serializable {
 
 
     public List<GhostNet> getReportedGhostNets() {
-        return reportedGhostNets = this.ghostNetDAO.getReportedGhostNets();
+        return this.reportedGhostNets = this.ghostNetDAO.getGhostNetsByStatus(GhostNetStatus.REPORTED);
     }
 
     public List<GhostNet> getRecoveringAnnouncedGhostNets() {
-        return recoveringAnnouncedGhostNets = this.ghostNetDAO.getRecoveringAnnouncedGhostNets();
+        return this.recoveringAnnouncedGhostNets = this.ghostNetDAO.getGhostNetsByStatus(GhostNetStatus.RECOVERING_ANNOUNCED);
+    }
+
+    public List<GhostNet> getRecoveredGhostNets() {
+        return this.recoveredGhostNets = this.ghostNetDAO.getGhostNetsByStatus(GhostNetStatus.RECOVERED);
     }
 
     public String addGhostNetAsRecoveringPerson() {
@@ -115,12 +120,13 @@ public class GhostNetController implements Serializable {
     }
 
     public String announceRecovering(UUID uuid) {
-        this.ghostNetDAO.announceRecovering(uuid);
+        this.ghostNetDAO.changeGhostNetStatus(uuid, GhostNetStatus.RECOVERING_ANNOUNCED);
         return this.navigationService.getPortalPage();
     }
 
-    public void announceRecovered(UUID uuid) {
-        // TODO: implement
+    public String announceRecovered(UUID uuid) {
+        this.ghostNetDAO.changeGhostNetStatus(uuid, GhostNetStatus.RECOVERED);
+        return this.navigationService.getPortalPage();
     }
 
     public String goToGhostNetReporting() {
