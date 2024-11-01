@@ -21,9 +21,9 @@ public class GhostNet {
     @Column(nullable = false)
     private GhostNetStatus status;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "reportingUserId", nullable = false)
-    private Person reportedBy;
+    @ManyToOne
+    @JoinColumn(name = "reportingUserId")
+    private ReportingPerson reportedBy;
 
     @ManyToOne
     @JoinColumn(name = "recoveringAnnouncedUserId")
@@ -35,13 +35,20 @@ public class GhostNet {
 
     @ManyToOne
     @JoinColumn(name = "announcedLostUserId")
-    private RecoveringPerson announcesLostBy;
+    private Person announcedLostBy;
 
 
     public GhostNet() {
     }
 
-    public GhostNet(String latitude, String longitude, int size, GhostNetStatus status, Person reportedBy) {
+    public GhostNet(String latitude, String longitude, int size, GhostNetStatus status) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.size = size;
+        this.status = status;
+    }
+
+    public GhostNet(String latitude, String longitude, int size, GhostNetStatus status, ReportingPerson reportedBy) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.size = size;
@@ -89,11 +96,11 @@ public class GhostNet {
         this.status = status;
     }
 
-    public Person getReportedBy() {
+    public ReportingPerson getReportedBy() {
         return reportedBy;
     }
 
-    public void setReportedBy(Person reportedBy) {
+    public void setReportedBy(ReportingPerson reportedBy) {
         this.reportedBy = reportedBy;
     }
 
@@ -113,11 +120,11 @@ public class GhostNet {
         this.recoveredBy = recoveredBy;
     }
 
-    public RecoveringPerson getAnnouncesLostBy() {
-        return announcesLostBy;
+    public Person getAnnouncedLostBy() {
+        return announcedLostBy;
     }
 
-    public void setAnnouncesLostBy(RecoveringPerson announcesLostBy) {
-        this.announcesLostBy = announcesLostBy;
+    public void setAnnouncedLostBy(Person announcesLostBy) {
+        this.announcedLostBy = announcesLostBy;
     }
 }

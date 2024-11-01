@@ -3,7 +3,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,46 +26,26 @@ public class GhostNetController implements Serializable {
     private GhostNetDAO ghostNetDAO;
 
     @Inject
-    private RecoveringPersonDAO recoveringPersonDAO;
-
-    @Inject
     private ReportingPersonController reportingPersonController;
 
     private String latitude;
     private String longitude;
     private int size;
 
+    private boolean anonymous = false;
     private String name;
     private String phoneNumber;
 
-    private List<GhostNet> reportedGhostNets = new ArrayList<>();
+    private String tempName;
+    private String tempPhoneNumber;
+    private GhostNet tempGhostNet;
 
-    private List<GhostNet> recoveringAnnouncedGhostNets = new ArrayList<>();
-    private List<GhostNet> recoveredGhostNets = new ArrayList<>();
-    private List<GhostNet> lostGhostNets = new ArrayList<>();
-
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     public String getLongitude() {
@@ -77,53 +56,105 @@ public class GhostNetController implements Serializable {
         this.longitude = longitude;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public int getSize() {
+        return size;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public void setSize(int size) {
+        this.size = size;
     }
 
+    public boolean isAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(boolean anonymous) {
+        this.anonymous = anonymous;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getTempName() {
+        return tempName;
+    }
+
+    public void setTempName(String tempName) {
+        this.tempName = tempName;
+    }
+
+    public String getTempPhoneNumber() {
+        return tempPhoneNumber;
+    }
+
+    public void setTempPhoneNumber(String tempPhoneNumber) {
+        this.tempPhoneNumber = tempPhoneNumber;
+    }
+
+    public GhostNet getTempGhostNet() {
+        return tempGhostNet;
+    }
+
+    public void setTempGhostNet(GhostNet tempGhostNet) {
+        this.tempGhostNet = tempGhostNet;
+    }
+
+    public List<GhostNet> getReportedGhostNetsOverview() {
+        return this.ghostNetDAO.getAllReportedGhostNets();
+    }
 
     public List<GhostNet> getReportedGhostNets() {
-        return reportedGhostNets = this.ghostNetDAO.getAllReportedGhostNets();
+        return this.ghostNetDAO.getAllReportedGhostNets();
     }
 
     public List<GhostNet> getRecoveringAnnouncedGhostNets() {
-        return recoveringAnnouncedGhostNets = this.ghostNetDAO.getGhostNetsByStatusAndUserId(GhostNetStatus.RECOVERING_ANNOUNCED, this.currentApplicationUser.getRecoveringPerson().getUserId());
+        return this.ghostNetDAO.getGhostNetsByStatusAndUserId(GhostNetStatus.RECOVERING_ANNOUNCED, this.currentApplicationUser.getRecoveringPerson().getUserId());
     }
 
     public List<GhostNet> getRecoveredGhostNets() {
-        return recoveredGhostNets = this.ghostNetDAO.getGhostNetsByStatusAndUserId(GhostNetStatus.RECOVERED, this.currentApplicationUser.getRecoveringPerson().getUserId());
+        return this.ghostNetDAO.getGhostNetsByStatusAndUserId(GhostNetStatus.RECOVERED, this.currentApplicationUser.getRecoveringPerson().getUserId());
     }
 
     public List<GhostNet> getLostGhostNets() {
-        return lostGhostNets = this.ghostNetDAO.getGhostNetsByStatusAndUserId(GhostNetStatus.LOST, this.currentApplicationUser.getRecoveringPerson().getUserId());
+        return this.ghostNetDAO.getGhostNetsByStatusAndUserId(GhostNetStatus.LOST, this.currentApplicationUser.getRecoveringPerson().getUserId());
     }
 
-    public String addGhostNetAsRecoveringPerson() {
-        if (this.validateInputFieldsGhostNet()) {
-            this.ghostNetDAO.addGhostNet(
-                    new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED, this.currentApplicationUser.getRecoveringPerson())
-            );
-            return this.navigationService.getPortalPage();
-        }
-        return this.navigationService.stayOnPage();
+    public List<GhostNet> getAllLostGhostNets() {
+        return this.ghostNetDAO.getAllLostGhostNets();
     }
 
     public void addGhostNetAsReportingPerson() {
-        if (this.validateInputFieldsGhostNet() && this.validateInputFieldsReportingPerson()) {
-            this.reportingPersonController.setName(this.name);
-            this.reportingPersonController.setPhoneNumber(this.phoneNumber);
-            ReportingPerson person = this.reportingPersonController.addReportingPerson();
-
-            this.ghostNetDAO.addGhostNet(
-                    new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED, person)
-            );
-
-            this.resetInputFields();
+        if (!anonymous) {
+            if (this.validateInputFieldsGhostNet() && this.validateInputFieldsReportingPerson()) {
+                ReportingPerson person = this.reportingPersonController.addReportingPerson(new ReportingPerson(this.name, this.phoneNumber));
+                this.ghostNetDAO.addGhostNet(
+                        new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED, person)
+                );
+            }
         }
+        else {
+            if (this.validateInputFieldsGhostNet()) {
+                this.ghostNetDAO.addGhostNet(
+                        new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED)
+                );
+            }
+        }
+
+        this.resetInputFields();
     }
 
     public String announceRecovering(UUID ghostNetId) {
@@ -141,8 +172,22 @@ public class GhostNetController implements Serializable {
         return this.navigationService.getPortalPage();
     }
 
+    public String announceLostAsReportingPerson() {
+        if (this.validateInputFieldsAnnounceLostAsReportingPerson(this.tempName, this.tempPhoneNumber)) {
+            ReportingPerson person = this.reportingPersonController.addReportingPerson(new ReportingPerson(this.tempName, this.tempPhoneNumber));
+            this.ghostNetDAO.announceLostAsReportingPerson(this.tempGhostNet.getGhostNetId(), person);
+        }
+
+        this.resetTempVariables();
+        return this.navigationService.getOverviewPage();
+    }
+
     public String goToGhostNetReporting() {
         return this.navigationService.getReportingPage();
+    }
+
+    public String goToGhostNetOverview() {
+        return this.navigationService.getOverviewPage();
     }
 
     private boolean validateInputFieldsGhostNet() {
@@ -172,7 +217,25 @@ public class GhostNetController implements Serializable {
         boolean valid = true;
 
         ValidationResult nameResult = this.validationService.validateName(this.name, true);
-        ValidationResult phoneNumberResult = this.validationService.validatePhoneNumber(this.phoneNumber, false);
+        ValidationResult phoneNumberResult = this.validationService.validatePhoneNumber(this.phoneNumber, true);
+
+        if (!nameResult.isValid()) {
+            valid = false;
+            this.messageService.addMessage(new Message(nameResult.getMessage(), MessageType.FAILURE));
+        }
+        if (!phoneNumberResult.isValid()) {
+            valid = false;
+            this.messageService.addMessage(new Message(phoneNumberResult.getMessage(), MessageType.FAILURE));
+        }
+
+        return valid;
+    }
+
+    private boolean validateInputFieldsAnnounceLostAsReportingPerson(String name, String phoneNumber) {
+        boolean valid = true;
+
+        ValidationResult nameResult = this.validationService.validateName(name, true);
+        ValidationResult phoneNumberResult = this.validationService.validatePhoneNumber(phoneNumber, true);
 
         if (!nameResult.isValid()) {
             valid = false;
@@ -192,5 +255,12 @@ public class GhostNetController implements Serializable {
         this.size = 0;
         this.name = null;
         this.phoneNumber = null;
+        this.anonymous = false;
+    }
+
+    private void resetTempVariables() {
+        this.tempName = null;
+        this.tempPhoneNumber = null;
+        this.tempGhostNet = null;
     }
 }

@@ -95,6 +95,15 @@ public class LoginController implements Serializable {
         }
     }
 
+    public void redirectToPortalPage() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(this.navigationService.getPortalPage());
+        } catch (IOException e) {
+            System.err.println("Fehler: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     private boolean validateInputFields() {
         boolean valid = true;
 
