@@ -72,7 +72,6 @@ public class GhostNetDAO {
                     break;
                 case RECOVERED:
                     ghostNet.setRecoveredBy(this.currentApplicationUser.getRecoveringPerson());
-                    ghostNet.setRecoveringAnnouncedBy(null);
                     break;
                 case LOST:
                     ghostNet.setAnnouncedLostBy(this.currentApplicationUser.getRecoveringPerson());
@@ -179,7 +178,7 @@ public class GhostNetDAO {
             case LOST:
                 query.select(root).where(criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("status"), status),
-                                criteriaBuilder.equal(root.get("announcesLostBy").get("userId"), userId)))
+                                criteriaBuilder.equal(root.get("announcedLostBy").get("userId"), userId)))
                         .orderBy(criteriaBuilder.desc(root.get("size")));
                 break;
         }

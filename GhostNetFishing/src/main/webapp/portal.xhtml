@@ -3,42 +3,40 @@
 <ui:composition template="baseTemplate.xhtml">
     <ui:define name="content">
         <h:panelGroup rendered="#{loginController.loggedIn}">
-            <div>
-                <h:outputLabel class="shea-sepherd-color-font-primary h3" value="Bergungsportal"/>
+            <h:outputText class="shea-sepherd-color-font-primary h4" value="Bergungsportal"/>
 
-                <div class="d-flex mt-4">
-                    <div class="w-25 me-2">
-                        <div class="text-center rounded bg-secondary-subtle pt-2 pb-1">
-                            <h:outputLabel class="shea-sepherd-color-font-primary h6 fw-bold" value="Geisternetze mit Status..."/>
+            <div class="d-flex mt-4 mb-4">
+                <div class="w-25 me-2">
+                    <div class="rounded border border-1 border-solid p-1 bg-light">
+                        <div class="text-center rounded bg-secondary-subtle p-2">
+                            <h:outputText class="h6 fw-bold" value="(Alle) Geisternetze mit Status..."/>
                         </div>
 
-                        <div class="text-center rounded bg-danger-subtle pt-2 pb-1 mt-1">
-                            <h:outputLabel class="shea-sepherd-color-font-primary h6" value="...Gemeldet"/>
+                        <div class="text-center rounded bg-danger-subtle p-2 mt-1 border border-1 border-dark">
+                            <h:outputText class="h6" value="...Gemeldet"/>
                         </div>
 
                         <div class="p-2 mt-2 mb-3">
                             <h:form>
+                                <h:panelGroup rendered="#{empty ghostNetController.reportedGhostNets}">
+                                    <h:outputText styleClass="shea-sepherd-color-font-primary" value="Es wurden keine neuen Geisternetze gemeldet."/>
+                                </h:panelGroup>
+
                                 <ui:repeat value="#{ghostNetController.reportedGhostNets}" var="ghostnet">
                                     <div class="card mt-1 ms-1 me-1 bg-danger-subtle border-0">
                                         <div class="card-body">
-                                            <div class="d-flex">
-                                                <div class="w-75">
-                                                    <div><h:outputText class="card-title h5" value="~ #{ghostnet.size} m²"/></div>
-                                                    <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.latitude}"/></div>
-                                                    <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.longitude}"/></div>
+                                            <div class="mb-2">
+                                                <div><h:outputText class="card-title h5" value="~ #{ghostnet.size} m²"/></div>
+                                                <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.location.latitude}"/></div>
+                                                <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.location.longitude}"/></div>
 
-                                                    <div><h:outputText class="card-text mb-2" value="Gemeldet: #{ghostnet.reportedBy != null ? ghostnet.reportedBy.name.concat(' (').concat(ghostnet.reportedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
-                                                </div>
-                                                <div class="w-25 text-end">
-                                                    <h:commandLink styleClass="btn btn-warning p-2" action="#{ghostNetController.announceRecovering(ghostnet.ghostNetId)}">
-                                                        <i class="bi bi-caret-right fs-2"></i>
-                                                    </h:commandLink>
-                                                </div>
+                                                <div><h:outputText class="card-text mb-2" value="Gemeldet: #{ghostnet.reportedBy != null ? ghostnet.reportedBy.name.concat(' (').concat(ghostnet.reportedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
                                             </div>
                                             <div class="mt-1">
-                                                <h:commandLink styleClass="btn btn-light p-2 w-100" action="#{ghostNetController.announceLost(ghostnet.ghostNetId)}">
-                                                    <i class="bi bi-trash fs-4"></i>
-                                                </h:commandLink>
+                                                <h:commandLink value="Bergung ankündigen" styleClass="btn btn-warning w-100 p-2" action="#{ghostNetController.announceRecovering(ghostnet.ghostNetId)}"/>
+                                            </div>
+                                            <div class="mt-1">
+                                                <h:commandLink value="Verschollen melden" styleClass="btn btn-light p-2 w-100" action="#{ghostNetController.announceLost(ghostnet.ghostNetId)}"/>
                                             </div>
                                         </div>
                                     </div>
@@ -46,41 +44,39 @@
                             </h:form>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex-grow-1">
-                        <div class="text-center rounded bg-secondary-subtle pt-2 pb-1">
-                            <h:outputLabel class="shea-sepherd-color-font-primary h6 fw-bold" value="Von mir gemeldet als..."/>
+                <div class="flex-grow-1">
+                    <div class="rounded border border-1 border-solid p-1 bg-light">
+                        <div class="text-center rounded bg-secondary-subtle rounded p-2">
+                            <h:outputText class="h6 fw-bold" value="Von mir gemeldet als..."/>
                         </div>
 
                         <div class="d-flex">
                             <div class="flex-fill me-1">
-                                <div class="text-center rounded bg-warning-subtle pt-2 pb-1 mt-1">
-                                    <h:outputLabel class="shea-sepherd-color-font-primary h6" value="...Bergung bevorstehend"/>
+                                <div class="text-center rounded bg-warning-subtle p-2 mt-1 border border-1 border-dark">
+                                    <h:outputText class="h6" value="...Bergung bevorstehend"/>
                                 </div>
                                 <div class="p-2 mt-2 mb-3">
                                     <h:form>
                                         <ui:repeat value="#{ghostNetController.recoveringAnnouncedGhostNets}" var="ghostnet">
                                             <div class="card mt-1 ms-1 me-1 bg-warning-subtle border-0">
                                                 <div class="card-body">
-                                                    <div class="d-flex">
-                                                        <div class="w-75">
+                                                    <div class="card-body">
+                                                        <div class="mb-2">
                                                             <div><h:outputText class="card-title h5" value="~ #{ghostnet.size} m²"/></div>
-                                                            <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.latitude}"/></div>
-                                                            <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.longitude}"/></div>
+                                                            <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.location.latitude}"/></div>
+                                                            <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.location.longitude}"/></div>
 
                                                             <div><h:outputText class="card-text" value="Gemeldet: #{ghostnet.reportedBy != null ? ghostnet.reportedBy.name.concat(' (').concat(ghostnet.reportedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
                                                             <div><h:outputText class="card-text mb-2" value="Bergung angekündigt: #{ghostnet.recoveringAnnouncedBy != null ? ghostnet.recoveringAnnouncedBy.name.concat(' (').concat(ghostnet.recoveringAnnouncedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
                                                         </div>
-                                                        <div class="w-25 text-end">
-                                                            <h:commandLink styleClass="btn btn-success p-2" action="#{ghostNetController.announceRecovered(ghostnet.ghostNetId)}">
-                                                                <i class="bi bi-caret-right fs-2"></i>
-                                                            </h:commandLink>
+                                                        <div class="mt-1">
+                                                            <h:commandLink value="Bergung erfolgt" styleClass="btn btn-success w-100 p-2" action="#{ghostNetController.announceRecovered(ghostnet.ghostNetId)}"/>
                                                         </div>
-                                                    </div>
-                                                    <div class="mt-1">
-                                                        <h:commandLink styleClass="btn btn-light p-2 w-100" action="#{ghostNetController.announceLost(ghostnet.ghostNetId)}">
-                                                            <i class="bi bi-trash fs-4"></i>
-                                                        </h:commandLink>
+                                                        <div class="mt-1">
+                                                            <h:commandLink value="Verschollen melden" styleClass="btn btn-light p-2 w-100" action="#{ghostNetController.announceLost(ghostnet.ghostNetId)}"/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,8 +85,8 @@
                                 </div>
                             </div>
                             <div class="flex-fill me-1">
-                                <div class="text-center rounded bg-success-subtle pt-2 pb-1 mt-1">
-                                    <h:outputLabel class="shea-sepherd-color-font-primary h6" value="...Geborgen"/>
+                                <div class="text-center rounded bg-success-subtle p-2 mt-1 border border-1 border-dark">
+                                    <h:outputText class="h6" value="...Geborgen"/>
                                 </div>
                                 <div class="p-2 mt-2 mb-3">
                                     <h:form>
@@ -100,8 +96,8 @@
                                                     <div class="d-flex">
                                                         <div class="w-75">
                                                             <div><h:outputText class="card-title h5" value="~ #{ghostnet.size} m²"/></div>
-                                                            <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.latitude}"/></div>
-                                                            <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.longitude}"/></div>
+                                                            <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.location.latitude}"/></div>
+                                                            <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.location.longitude}"/></div>
 
                                                             <div><h:outputText class="card-text" value="Gemeldet: #{ghostnet.reportedBy != null ? ghostnet.reportedBy.name.concat(' (').concat(ghostnet.reportedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
                                                             <div><h:outputText class="card-text" value="Bergung angekündigt: #{ghostnet.recoveringAnnouncedBy != null ? ghostnet.recoveringAnnouncedBy.name.concat(' (').concat(ghostnet.recoveringAnnouncedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
@@ -115,8 +111,8 @@
                                 </div>
                             </div>
                             <div class="flex-fill">
-                                <div class="text-center rounded bg-secondary-subtle text-white pt-2 pb-1 mt-1">
-                                    <h:outputLabel class="shea-sepherd-color-font-primary h6" value="...Verschollen"/>
+                                <div class="text-center rounded bg-secondary-subtle text-white p-2 mt-1 border border-1 border-dark">
+                                    <h:outputText class="text-dark h6" value="...Verschollen"/>
                                 </div>
                                 <div class="p-2 mt-2 mb-3">
                                     <h:form>
@@ -126,12 +122,10 @@
                                                     <div class="d-flex">
                                                         <div class="w-75">
                                                             <div><h:outputText class="card-title h5" value="~ #{ghostnet.size} m²"/></div>
-                                                            <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.latitude}"/></div>
-                                                            <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.longitude}"/></div>
+                                                            <div><h:outputText class="card-text" value="Breitengrad: #{ghostnet.location.latitude}"/></div>
+                                                            <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.location.longitude}"/></div>
 
                                                             <div><h:outputText class="card-text" value="Gemeldet: #{ghostnet.reportedBy != null ? ghostnet.reportedBy.name.concat(' (').concat(ghostnet.reportedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
-                                                            <div><h:outputText class="card-text" value="Bergung angekündigt: #{ghostnet.recoveringAnnouncedBy != null ? ghostnet.recoveringAnnouncedBy.name.concat(' (').concat(ghostnet.recoveringAnnouncedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
-                                                            <div><h:outputText class="card-text" value="Geborgen: #{ghostnet.recoveredBy.name + '' + ghostnet.recoveredBy.phoneNumber + ')'}"/></div>
                                                             <div><h:outputText class="card-text mb-2" value="Verschollen gemeldet: #{ghostnet.announcedLostBy != null ? ghostnet.announcedLostBy.name.concat(' (').concat(ghostnet.announcedLostBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
                                                         </div>
                                                     </div>

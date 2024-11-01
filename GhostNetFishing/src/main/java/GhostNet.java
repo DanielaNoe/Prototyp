@@ -10,16 +10,14 @@ public class GhostNet {
     private UUID ghostNetId;
 
     @Column(nullable = false)
-    private String latitude;
-
-    @Column(nullable = false)
-    private String longitude;
-
-    @Column(nullable = false)
     private int size;
 
     @Column(nullable = false)
     private GhostNetStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "locationId", nullable = false)
+    private Location location;
 
     @ManyToOne
     @JoinColumn(name = "reportingUserId")
@@ -41,16 +39,14 @@ public class GhostNet {
     public GhostNet() {
     }
 
-    public GhostNet(String latitude, String longitude, int size, GhostNetStatus status) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public GhostNet(Location location, int size, GhostNetStatus status) {
+        this.location = location;
         this.size = size;
         this.status = status;
     }
 
-    public GhostNet(String latitude, String longitude, int size, GhostNetStatus status, ReportingPerson reportedBy) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public GhostNet(Location location, int size, GhostNetStatus status, ReportingPerson reportedBy) {
+        this.location = location;
         this.size = size;
         this.status = status;
         this.reportedBy = reportedBy;
@@ -64,20 +60,12 @@ public class GhostNet {
         this.ghostNetId = ghostNetId;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public int getSize() {
@@ -124,7 +112,7 @@ public class GhostNet {
         return announcedLostBy;
     }
 
-    public void setAnnouncedLostBy(Person announcesLostBy) {
-        this.announcedLostBy = announcesLostBy;
+    public void setAnnouncedLostBy(Person announcedLostBy) {
+        this.announcedLostBy = announcedLostBy;
     }
 }

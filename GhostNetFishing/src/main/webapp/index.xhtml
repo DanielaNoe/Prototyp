@@ -6,70 +6,73 @@
   <ui:define name="content">
     <h:panelGroup rendered="#{!loginController.loggedIn}">
       <div class="container container-fluid">
-        <h:outputLabel class="shea-sepherd-color-font-primary h3" value="Formular Geisternetzerfassung"/>
-        <h:form id="formId">
-          <div class="row">
-            <div class="col">
-              <h:outputLabel class="shea-sepherd-color-font-primary h6" value="Geisternetz"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h:outputLabel value="Breitengrad (-90.0000 bis 90.0000)*" for="latitude"/>
-              <h:inputText id="latitude" value="#{ghostNetController.latitude}" class="form-control"/>
-            </div>
-          </div>
-          <div class="row mt-1">
-            <div class="col">
-              <h:outputLabel value="Längengrad (-180.0000 bis 180.0000)*" for="longitude"/>
-              <h:inputText id="longitude" value="#{ghostNetController.longitude}" class="form-control"/>
-            </div>
-          </div>
-          <div class="row mt-1">
-            <div class="col">
-              <h:outputLabel value="Geschätzte Größe (m²)*" for="size"/>
-              <h:inputText id="size" value="#{ghostNetController.size}" class="form-control"
-                           pt:type="number" pt:min="1" pt:max="200000" pt:step="1"/>
-            </div>
-          </div>
+        <h:outputText class="shea-sepherd-color-font-primary h4" value="Formular Geisternetzerfassung"/>
 
-          <div class="row mt-4">
-            <div class="col">
-              <h:outputLabel class="shea-sepherd-color-font-primary h6" value="Ihre Kontaktdaten*"/>
+        <div class="mt-4 mb-4">
+          <h:form id="formId">
+            <div class="row">
+              <div class="col">
+                <h:outputText class="shea-sepherd-color-font-primary h6" value="Geisternetz"/>
+              </div>
             </div>
-          </div>
-          <div class="row mt-2">
-            <div class="col">
-              <h:selectBooleanCheckbox id="anonymous" value="#{ghostNetController.anonymous}" style="transform: scale(1.5); margin-right: 10px"/>
-              <h:outputLabel for="anonymous" value="Anonym bleiben"/>
+            <div class="row">
+              <div class="col">
+                <h:outputLabel value="Breitengrad (-90.0000 bis 90.0000)*" for="latitude"/>
+                <h:inputText id="latitude" value="#{ghostNetController.latitude}" class="form-control"/>
+              </div>
             </div>
-          </div>
-          <div class="row mt-4">
-            <div class="col">
-              <h:outputLabel class="shea-sepherd-color-font-primary h6 ms-5" value="ODER:"/>
+            <div class="row mt-1">
+              <div class="col">
+                <h:outputLabel value="Längengrad (-180.0000 bis 180.0000)*" for="longitude"/>
+                <h:inputText id="longitude" value="#{ghostNetController.longitude}" class="form-control"/>
+              </div>
             </div>
-          </div>
-          <div class="row mt-1">
-            <div class="col">
-              <h:outputLabel value="Name" for="name"/>
-              <h:inputText id="name" value="#{ghostNetController.name}" class="form-control"/>
+            <div class="row mt-1">
+              <div class="col">
+                <h:outputLabel value="Geschätzte Größe (m²)*" for="size"/>
+                <h:inputText id="size" value="#{ghostNetController.size}" class="form-control"
+                             pt:type="number" pt:min="1" pt:max="200000" pt:step="1"/>
+              </div>
             </div>
-          </div>
-          <div class="row mt-1">
-            <div class="col">
-              <h:outputLabel value="Telefonnummer" for="phoneNumber"/>
-              <h:inputText id="phoneNumber" value="#{ghostNetController.phoneNumber}" class="form-control"/>
-            </div>
-          </div>
 
-          <div class="row mt-1">
-            <div class="col">
-              <h:outputLabel class="form-text" value="*Pflichtfeld"/>
+            <div class="row mt-4">
+              <div class="col">
+                <h:outputText class="shea-sepherd-color-font-primary h6" value="Ihre Kontaktdaten*"/>
+              </div>
             </div>
-          </div>
+            <div class="row mt-2">
+              <div class="col">
+                <h:selectBooleanCheckbox id="anonymous" value="#{ghostNetController.anonymous}" style="transform: scale(1.5); margin-right: 10px"/>
+                <h:outputLabel for="anonymous" value="Anonym bleiben"/>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col">
+                <h:outputLabel class="shea-sepherd-color-font-primary h6 ms-5" value="ODER:"/>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <h:outputLabel value="Name" for="name"/>
+                <h:inputText id="name" value="#{ghostNetController.name}" class="form-control"/>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <h:outputLabel value="Telefonnummer" for="phoneNumber"/>
+                <h:inputText id="phoneNumber" value="#{ghostNetController.phoneNumber}" class="form-control"/>
+              </div>
+            </div>
 
-          <h:commandButton class="btn btn-primary mt-2 w-100" value="Melden" action="#{ghostNetController.addGhostNetAsReportingPerson}"/>
-        </h:form>
+            <div class="row mt-1">
+              <div class="col">
+                <h:outputText class="form-text" value="*Pflichtfeld"/>
+              </div>
+            </div>
+
+            <h:commandButton class="btn btn-primary mt-2 w-100" value="Melden" action="#{ghostNetController.addGhostNetAsReportingPerson}"/>
+          </h:form>
+        </div>
       </div>
     </h:panelGroup>
 

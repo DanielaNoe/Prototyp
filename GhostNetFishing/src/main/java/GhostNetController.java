@@ -26,6 +26,9 @@ public class GhostNetController implements Serializable {
     private GhostNetDAO ghostNetDAO;
 
     @Inject
+    private LocationDAO locationDAO;
+
+    @Inject
     private ReportingPersonController reportingPersonController;
 
     private String latitude;
@@ -137,24 +140,26 @@ public class GhostNetController implements Serializable {
         return this.ghostNetDAO.getAllLostGhostNets();
     }
 
-    public void addGhostNetAsReportingPerson() {
+    public String addGhostNetAsReportingPerson() {
         if (!anonymous) {
             if (this.validateInputFieldsGhostNet() && this.validateInputFieldsReportingPerson()) {
                 ReportingPerson person = this.reportingPersonController.addReportingPerson(new ReportingPerson(this.name, this.phoneNumber));
+                Location location = this.locationDAO.addLocation(new Location(this.latitude, this.longitude));
                 this.ghostNetDAO.addGhostNet(
-                        new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED, person)
+                        new GhostNet(location, this.size, GhostNetStatus.REPORTED, person)
                 );
             }
         }
         else {
             if (this.validateInputFieldsGhostNet()) {
+                Location location = this.locationDAO.addLocation(new Location(this.latitude, this.longitude));
                 this.ghostNetDAO.addGhostNet(
-                        new GhostNet(this.latitude, this.longitude, this.size, GhostNetStatus.REPORTED)
+                        new GhostNet(location, this.size, GhostNetStatus.REPORTED)
                 );
             }
         }
 
-        this.resetInputFields();
+        return this.navigationService.getOverviewPage();
     }
 
     public String announceRecovering(UUID ghostNetId) {
@@ -247,15 +252,6 @@ public class GhostNetController implements Serializable {
         }
 
         return valid;
-    }
-
-    private void resetInputFields() {
-        this.latitude = null;
-        this.longitude = null;
-        this.size = 0;
-        this.name = null;
-        this.phoneNumber = null;
-        this.anonymous = false;
     }
 
     private void resetTempVariables() {
