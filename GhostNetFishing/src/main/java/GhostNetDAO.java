@@ -42,7 +42,7 @@ public class GhostNetDAO {
             this.entityManager.persist(ghostNet);
             transaction.commit();
 
-            this.messageService.addMessage(new Message("Ghost net reported successfully!", MessageType.SUCCESS));
+            this.messageService.addMessage(new Message("Meldung erfolgreich!", MessageType.SUCCESS));
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -80,9 +80,9 @@ public class GhostNetDAO {
 
             transaction.commit();
 
-            this.messageService.addMessage(new Message("Ghost net status changed successfully!", MessageType.SUCCESS));
+            this.messageService.addMessage(new Message("Status erfolgreich geändert!", MessageType.SUCCESS));
         } catch (NoResultException e) {
-            this.messageService.addMessage(new Message("Ghost net not found!", MessageType.FAILURE));
+            this.messageService.addMessage(new Message("Geisternetz nicht gefunden!", MessageType.FAILURE));
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -113,9 +113,9 @@ public class GhostNetDAO {
 
             transaction.commit();
 
-            this.messageService.addMessage(new Message("Ghost net status changed successfully!", MessageType.SUCCESS));
+            this.messageService.addMessage(new Message("Status erfolreich geändert!", MessageType.SUCCESS));
         } catch (NoResultException e) {
-            this.messageService.addMessage(new Message("Ghost net not found!", MessageType.FAILURE));
+            this.messageService.addMessage(new Message("Geisternetz nicht gefunden!", MessageType.FAILURE));
             if (transaction.isActive()) {
                 transaction.rollback();
             }

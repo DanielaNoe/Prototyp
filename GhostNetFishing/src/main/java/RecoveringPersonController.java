@@ -57,7 +57,7 @@ public class RecoveringPersonController implements Serializable {
         }
 
         if (this.recoveringPersonDAO.getRecoveringPersonPersonByPhoneNumber(this.phoneNumber) != null) {
-            this.messageService.addMessage(new Message("User with this phone number already exists!", MessageType.FAILURE));
+            this.messageService.addMessage(new Message("Ein Nutzer mit dieser Telefonnummer existiert bereits!", MessageType.FAILURE));
             return this.navigationService.stayOnPage();
         }
 

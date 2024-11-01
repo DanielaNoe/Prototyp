@@ -36,7 +36,7 @@ public class RecoveringPersonDAO {
             this.entityManager.persist(person);
             transaction.commit();
 
-            this.messageService.addMessage(new Message("Registration successful!!", MessageType.SUCCESS));
+            this.messageService.addMessage(new Message("Registrierung erfolgreich!!", MessageType.SUCCESS));
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
