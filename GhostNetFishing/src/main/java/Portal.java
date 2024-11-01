@@ -3,7 +3,6 @@ import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
@@ -12,13 +11,13 @@ import java.util.Base64;
 @ApplicationScoped
 public class Portal {
 
-    private EntityManager entityManager;
-
     @ConfigProperty(name = "portal.pepper")
     private String pepper;
 
     @ConfigProperty(name = "portal.salt")
     private String salt;
+
+    private EntityManager entityManager;
 
     public Portal() {
         try {

@@ -9,20 +9,12 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Named
 @ApplicationScoped
 public class RecoveringPersonDAO {
 
     @Inject
     MessageService messageService;
-
-    @Inject
-    CurrentApplicationUser currentApplicationUser;
 
     private EntityManager entityManager;
     private CriteriaBuilder criteriaBuilder;
