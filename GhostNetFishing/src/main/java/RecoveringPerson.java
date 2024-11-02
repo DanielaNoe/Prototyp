@@ -7,11 +7,8 @@ public class RecoveringPerson extends Person {
 
     private String password;
 
-    @OneToMany(mappedBy = "recoveringAnnouncedBy", fetch = FetchType.EAGER)
-    private List<GhostNet> recoveringAnnouncedGhostNets;
-
-    @OneToMany(mappedBy = "recoveredBy", fetch = FetchType.EAGER)
-    private List<GhostNet> recoveredGhostNets;
+    @OneToMany(mappedBy = "recoveringPerson", fetch = FetchType.EAGER)
+    private List<GhostNet> assignedAnnouncedGhostNets;
 
     public RecoveringPerson() {
     }
@@ -29,19 +26,11 @@ public class RecoveringPerson extends Person {
         this.password = password;
     }
 
-    public List<GhostNet> getRecoveringAnnouncedGhostNets() {
-        return recoveringAnnouncedGhostNets;
+    public List<GhostNet> getAssignedAnnouncedGhostNets() {
+        return assignedAnnouncedGhostNets;
     }
 
-    public void setRecoveringAnnouncedGhostNets(List<GhostNet> recoveringAnnouncedGhostNets) {
-        this.recoveringAnnouncedGhostNets = recoveringAnnouncedGhostNets;
-    }
-
-    public List<GhostNet> getRecoveredGhostNets() {
-        return recoveredGhostNets;
-    }
-
-    public void setRecoveredGhostNets(List<GhostNet> recoveredGhostNets) {
-        this.recoveredGhostNets = recoveredGhostNets;
+    public void setAssignedAnnouncedGhostNets(List<GhostNet> assignedAnnouncedGhostNets) {
+        this.assignedAnnouncedGhostNets = assignedAnnouncedGhostNets;
     }
 }

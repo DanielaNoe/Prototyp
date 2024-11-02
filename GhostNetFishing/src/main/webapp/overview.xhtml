@@ -72,7 +72,7 @@
                               <div class="mb-2"><h:outputText class="card-text" value="Längengrad: #{ghostnet.location.longitude}"/></div>
 
                               <div><h:outputText class="card-text" value="Gemeldet: #{ghostnet.reportedBy != null ? ghostnet.reportedBy.name.concat(' (').concat(ghostnet.reportedBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
-                              <div><h:outputText class="card-text mb-2" value="Verschollen gemeldet: #{ghostnet.announcedLostBy != null ? ghostnet.announcedLostBy.name.concat(' (').concat(ghostnet.announcedLostBy.phoneNumber).concat(')') : 'Anonym'}"/></div>
+                              <div><h:outputText class="card-text mb-2" value="Verschollen gemeldet: #{ghostnet.announcedLostBy != null ? ghostnet.announcedLostBy.name.concat(' (').concat(ghostnet.announcedLostBy.phoneNumber).concat(')') : ''}"/></div>
                             </div>
                           </div>
                         </div>

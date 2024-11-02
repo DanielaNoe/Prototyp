@@ -68,10 +68,7 @@ public class GhostNetDAO {
 
             switch(status) {
                 case RECOVERING_ANNOUNCED:
-                    ghostNet.setRecoveringAnnouncedBy(this.currentApplicationUser.getRecoveringPerson());
-                    break;
-                case RECOVERED:
-                    ghostNet.setRecoveredBy(this.currentApplicationUser.getRecoveringPerson());
+                    ghostNet.setRecoveringPerson(this.currentApplicationUser.getRecoveringPerson());
                     break;
                 case LOST:
                     ghostNet.setAnnouncedLostBy(this.currentApplicationUser.getRecoveringPerson());
