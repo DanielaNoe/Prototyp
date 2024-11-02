@@ -15,18 +15,10 @@ public class Person implements Serializable {
 
     private String phoneNumber;
 
-    private String password;
-
     @OneToMany(mappedBy = "announcedLostBy", fetch = FetchType.EAGER)
     private List<GhostNet> lostGhostNets;
 
     public Person() {
-    }
-
-    public Person(String name, String phoneNumber, String password) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
     }
 
     public Person(String name, String phoneNumber) {
@@ -56,14 +48,6 @@ public class Person implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public List<GhostNet> getLostGhostNets() {
