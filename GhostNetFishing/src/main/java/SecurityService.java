@@ -9,17 +9,17 @@ import java.util.Base64;
 
 @Named
 @ApplicationScoped
-public class Portal {
+public class SecurityService {
 
-    @ConfigProperty(name = "portal.pepper")
+    @ConfigProperty(name = "securityService.pepper")
     private String pepper;
 
-    @ConfigProperty(name = "portal.salt")
+    @ConfigProperty(name = "securityService.salt")
     private String salt;
 
     private EntityManager entityManager;
 
-    public Portal() {
+    public SecurityService() {
         try {
             this.entityManager = Persistence.createEntityManagerFactory("ghost-net-fishing").createEntityManager();
         } catch (Exception e) {
@@ -44,6 +44,6 @@ public class Portal {
     }
 
     public static void main(String[] args) {
-        new Portal();
+        new SecurityService();
     }
 }

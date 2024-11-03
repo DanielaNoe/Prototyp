@@ -46,7 +46,7 @@ public class RecoveringPersonDAO {
         }
     }
 
-    public RecoveringPerson getRecoveringPersonPersonByPhoneNumber(String phoneNumber) {
+    public RecoveringPerson getRecoveringPersonByPhoneNumber(String phoneNumber) {
         CriteriaQuery<RecoveringPerson> query = this.criteriaBuilder.createQuery(RecoveringPerson.class);
         Root<RecoveringPerson> root = query.from(RecoveringPerson.class);
 

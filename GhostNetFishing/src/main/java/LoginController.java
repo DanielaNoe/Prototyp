@@ -20,7 +20,7 @@ public class LoginController implements Serializable {
     private MessageService messageService;
 
     @Inject
-    private Portal portal;
+    private SecurityService securityService;
 
     @Inject
     private RecoveringPersonDAO recoveringPersonDAO;
@@ -54,14 +54,14 @@ public class LoginController implements Serializable {
             return this.navigationService.getLoginPage();
         }
 
-        RecoveringPerson person = this.recoveringPersonDAO.getRecoveringPersonPersonByPhoneNumber(this.phoneNumber);
+        RecoveringPerson person = this.recoveringPersonDAO.getRecoveringPersonByPhoneNumber(this.phoneNumber);
 
         if (person == null) {
             this.messageService.addMessage(new Message("Telefonnummer nicht gefunden!", MessageType.FAILURE));
             return this.navigationService.getLoginPage();
         }
 
-        String hashedPassword = this.portal.hashPassword(this.password);
+        String hashedPassword = this.securityService.hashPassword(this.password);
 
         if (!person.getPassword().equals(hashedPassword)) {
             this.messageService.addMessage(new Message("Falsches Passwort!", MessageType.FAILURE));

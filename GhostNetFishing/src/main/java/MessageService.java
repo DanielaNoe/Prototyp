@@ -11,6 +11,9 @@ public class MessageService implements Serializable {
 
     private List<Message> messages = new ArrayList<>();
 
+    public MessageService() {
+    }
+
     public List<Message> getMessages() {
         return this.messages;
     }
