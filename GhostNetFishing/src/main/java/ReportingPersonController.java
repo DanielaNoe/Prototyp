@@ -11,30 +11,7 @@ public class ReportingPersonController implements Serializable {
     @Inject
     private ReportingPersonDAO reportingPersonDAO;
 
-    private String name;
-    private String phoneNumber;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public ReportingPerson addReportingPerson() {
-        if (this.phoneNumber != null && !this.phoneNumber.isEmpty()) {
-            return reportingPersonDAO.addReportingPerson(new ReportingPerson(this.name, this.phoneNumber));
-        }
-
-        return this.reportingPersonDAO.addReportingPerson(new ReportingPerson(this.name));
+    public ReportingPerson addReportingPerson(ReportingPerson reportingPerson) {
+        return reportingPersonDAO.addReportingPerson(reportingPerson);
     }
 }

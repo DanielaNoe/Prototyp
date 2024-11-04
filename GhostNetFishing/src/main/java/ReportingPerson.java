@@ -1,27 +1,25 @@
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class ReportingPerson extends Person {
 
-    private String phoneNumber;
+    @OneToMany(mappedBy = "reportedBy", fetch = FetchType.EAGER)
+    private List<GhostNet> reportedGhostNets;
 
     public ReportingPerson() {
     }
 
-    public ReportingPerson(String name) {
-        super(name);
-    }
-
     public ReportingPerson(String name, String phoneNumber) {
-        super(name);
-        this.phoneNumber = phoneNumber;
+        super(name, phoneNumber);
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public List<GhostNet> getReportedGhostNets() {
+        return reportedGhostNets;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setReportedGhostNets(List<GhostNet> reportedGhostNets) {
+        this.reportedGhostNets = reportedGhostNets;
     }
 }

@@ -36,7 +36,7 @@ public class RecoveringPersonDAO {
             this.entityManager.persist(person);
             transaction.commit();
 
-            this.messageService.addMessage(new Message("Registration successful!!", MessageType.SUCCESS));
+            this.messageService.addMessage(new Message("Registrierung erfolgreich!!", MessageType.SUCCESS));
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -46,7 +46,7 @@ public class RecoveringPersonDAO {
         }
     }
 
-    public RecoveringPerson getRecoveringPersonPersonByPhoneNumber(String phoneNumber) {
+    public RecoveringPerson getRecoveringPersonByPhoneNumber(String phoneNumber) {
         CriteriaQuery<RecoveringPerson> query = this.criteriaBuilder.createQuery(RecoveringPerson.class);
         Root<RecoveringPerson> root = query.from(RecoveringPerson.class);
 

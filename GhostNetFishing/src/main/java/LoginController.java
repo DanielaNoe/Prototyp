@@ -1,7 +1,9 @@
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 @Named
@@ -18,7 +20,7 @@ public class LoginController implements Serializable {
     private MessageService messageService;
 
     @Inject
-    private Portal portal;
+    private SecurityService securityService;
 
     @Inject
     private RecoveringPersonDAO recoveringPersonDAO;
@@ -49,25 +51,25 @@ public class LoginController implements Serializable {
         this.currentApplicationUser.logout();
 
         if (!this.validateInputFields()) {
-            return this.navigationService.stayOnPage();
+            return this.navigationService.getLoginPage();
         }
 
-        RecoveringPerson person = this.recoveringPersonDAO.getRecoveringPersonPersonByPhoneNumber(this.phoneNumber);
+        RecoveringPerson person = this.recoveringPersonDAO.getRecoveringPersonByPhoneNumber(this.phoneNumber);
 
         if (person == null) {
-            this.messageService.addMessage(new Message("Phone number not found!", MessageType.FAILURE));
-            return this.navigationService.stayOnPage();
+            this.messageService.addMessage(new Message("Telefonnummer nicht gefunden!", MessageType.FAILURE));
+            return this.navigationService.getLoginPage();
         }
 
-        String hashedPassword = this.portal.hashPassword(this.password);
+        String hashedPassword = this.securityService.hashPassword(this.password);
 
         if (!person.getPassword().equals(hashedPassword)) {
-            this.messageService.addMessage(new Message("Password is wrong!", MessageType.FAILURE));
-            return this.navigationService.stayOnPage();
+            this.messageService.addMessage(new Message("Falsches Passwort!", MessageType.FAILURE));
+            return this.navigationService.getLoginPage();
         }
 
         this.currentApplicationUser.login(person);
-        this.messageService.addMessage(new Message("Login successful!", MessageType.SUCCESS));
+        this.messageService.addMessage(new Message("Anmeldung erfolgreich!", MessageType.SUCCESS));
         return this.navigationService.getPortalPage();
     }
 
@@ -82,6 +84,24 @@ public class LoginController implements Serializable {
 
     public String toLoginPage() {
         return this.navigationService.getLoginPage();
+    }
+
+    public void redirectToLoginPage() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(this.navigationService.getLoginPage());
+        } catch (IOException e) {
+            System.err.println("Fehler: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void redirectToPortalPage() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(this.navigationService.getPortalPage());
+        } catch (IOException e) {
+            System.err.println("Fehler: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     private boolean validateInputFields() {

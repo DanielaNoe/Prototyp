@@ -1,30 +1,29 @@
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class Person {
+public class Person implements Serializable {
 
     @Id
     @GeneratedValue
     private UUID userId;
 
-    @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "reportedBy")
-    private List<GhostNet> reportedGhostNets;
+    private String phoneNumber;
 
-    @OneToMany(mappedBy = "recoveringAnnouncedBy")
-    private List<GhostNet> recoveringAnnouncedGhostNets;
-
+    @OneToMany(mappedBy = "announcedLostBy", fetch = FetchType.EAGER)
+    private List<GhostNet> lostGhostNets;
 
     public Person() {
     }
 
-    public Person(String name) {
+    public Person(String name, String phoneNumber) {
         this.name = name;
+        this.phoneNumber = phoneNumber;
     }
 
     public UUID getUserId() {
@@ -43,19 +42,19 @@ public class Person {
         this.name = name;
     }
 
-    public List<GhostNet> getReportedGhostNets() {
-        return reportedGhostNets;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setReportedGhostNets(List<GhostNet> reportedGhostNets) {
-        this.reportedGhostNets = reportedGhostNets;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public List<GhostNet> getRecoveringAnnouncedGhostNets() {
-        return recoveringAnnouncedGhostNets;
+    public List<GhostNet> getLostGhostNets() {
+        return lostGhostNets;
     }
 
-    public void setRecoveringAnnouncedGhostNets(List<GhostNet> recoveringAnnouncedGhostNets) {
-        this.recoveringAnnouncedGhostNets = recoveringAnnouncedGhostNets;
+    public void setLostGhostNets(List<GhostNet> lostGhostNets) {
+        this.lostGhostNets = lostGhostNets;
     }
 }

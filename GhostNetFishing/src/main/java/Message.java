@@ -1,9 +1,17 @@
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+
 import java.util.UUID;
 
+@Named
+@ApplicationScoped
 public class Message {
     private UUID uuid;
     private String message;
     private MessageType type;
+
+    public Message() {
+    }
 
     public Message(String message, MessageType type) {
         this.uuid = UUID.randomUUID();

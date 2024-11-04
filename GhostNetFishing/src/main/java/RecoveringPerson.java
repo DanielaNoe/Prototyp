@@ -1,27 +1,21 @@
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class RecoveringPerson extends Person {
 
-    private String phoneNumber;
-
     private String password;
+
+    @OneToMany(mappedBy = "recoveringPerson", fetch = FetchType.EAGER)
+    private List<GhostNet> assignedGhostNets;
 
     public RecoveringPerson() {
     }
 
     public RecoveringPerson(String name, String phoneNumber, String password) {
-        super(name);
-        this.phoneNumber = phoneNumber;
+        super(name, phoneNumber);
         this.password = password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {
@@ -30,5 +24,13 @@ public class RecoveringPerson extends Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<GhostNet> getAssignedGhostNets() {
+        return assignedGhostNets;
+    }
+
+    public void setAssignedGhostNets(List<GhostNet> assignedGhostNets) {
+        this.assignedGhostNets = assignedGhostNets;
     }
 }

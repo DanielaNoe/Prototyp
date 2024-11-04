@@ -4,34 +4,37 @@
 <ui:composition template="baseTemplate.xhtml">
     <ui:define name="content">
         <div class="container container-fluid">
-            <h:outputLabel class="shea-sepherd-color-font-primary h3" value="Sign up as recovering person"/>
-            <h:form>
-                <div class="row">
-                    <div class="col">
-                        <h:outputLabel value="Name*" for="name" class="form-label"/>
-                        <h:inputText id="name" value="#{recoveringPersonController.name}" class="form-control"/>
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <div class="col">
-                        <h:outputLabel value="Password*" for="password" class="form-label"/>
-                        <h:inputSecret id="password" value="#{recoveringPersonController.password}" class="form-control"/>
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <div class="col">
-                        <h:outputLabel value="Phone number*" for="phoneNumber" class="form-label"/>
-                        <h:inputText id="phoneNumber" value="#{recoveringPersonController.phoneNumber}" class="form-control"/>
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <div class="col">
-                        <h:outputLabel class="form-text" value="*Pflichtfeld"/>
-                    </div>
-                </div>
+            <h:outputText class="shea-sepherd-color-font-primary h4" value="Registrierung als bergende Person"/>
 
-                <h:commandButton class="btn btn-primary mt-2 w-100" value="Sign up" action="#{recoveringPersonController.addRecoveringPerson}"/>
-            </h:form>
+            <div class="mt-4 mb-4">
+                <h:form>
+                    <div class="row">
+                        <div class="col">
+                            <h:outputLabel value="Name*" for="name" class="form-label"/>
+                            <h:inputText id="name" value="#{recoveringPersonController.name}" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col">
+                            <h:outputLabel value="Passwort*" for="password" class="form-label"/>
+                            <h:inputSecret id="password" value="#{recoveringPersonController.password}" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col">
+                            <h:outputLabel value="Telefonnummer*" for="phoneNumber" class="form-label"/>
+                            <h:inputText id="phoneNumber" value="#{recoveringPersonController.phoneNumber}" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col">
+                            <h:outputText class="form-text" value="*Pflichtfeld"/>
+                        </div>
+                    </div>
+
+                    <h:commandButton class="btn btn-primary mt-2 w-100" value="Registrieren" action="#{recoveringPersonController.addRecoveringPerson}"/>
+                </h:form>
+            </div>
         </div>
     </ui:define>
 </ui:composition>

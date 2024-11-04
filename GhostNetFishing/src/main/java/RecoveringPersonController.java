@@ -18,7 +18,7 @@ public class RecoveringPersonController implements Serializable {
     private MessageService messageService;
 
     @Inject
-    private Portal portal;
+    private SecurityService securityService;
 
     @Inject
     private RecoveringPersonDAO recoveringPersonDAO;
@@ -56,13 +56,13 @@ public class RecoveringPersonController implements Serializable {
             return this.navigationService.stayOnPage();
         }
 
-        if (this.recoveringPersonDAO.getRecoveringPersonPersonByPhoneNumber(this.phoneNumber) != null) {
-            this.messageService.addMessage(new Message("User with this phone number already exists!", MessageType.FAILURE));
+        if (this.recoveringPersonDAO.getRecoveringPersonByPhoneNumber(this.phoneNumber) != null) {
+            this.messageService.addMessage(new Message("Ein Nutzer mit dieser Telefonnummer existiert bereits!", MessageType.FAILURE));
             return this.navigationService.stayOnPage();
         }
 
         this.recoveringPersonDAO.addRecoveringPerson(
-                new RecoveringPerson(this.name, this.phoneNumber, this.portal.hashPassword(this.password))
+                new RecoveringPerson(this.name, this.phoneNumber, this.securityService.hashPassword(this.password))
         );
 
         return this.navigationService.getLoginPage();

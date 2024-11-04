@@ -3,24 +3,23 @@ import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
 
 @Named
 @ApplicationScoped
-public class Portal {
+public class SecurityService {
+
+    @ConfigProperty(name = "securityService.pepper")
+    private String pepper;
+
+    @ConfigProperty(name = "securityService.salt")
+    private String salt;
 
     private EntityManager entityManager;
 
-    @ConfigProperty(name = "portal.pepper")
-    private String pepper;
-
-    @ConfigProperty(name = "portal.salt")
-    private String salt;
-
-    public Portal() {
+    public SecurityService() {
         try {
             this.entityManager = Persistence.createEntityManagerFactory("ghost-net-fishing").createEntityManager();
         } catch (Exception e) {
@@ -45,6 +44,6 @@ public class Portal {
     }
 
     public static void main(String[] args) {
-        new Portal();
+        new SecurityService();
     }
 }

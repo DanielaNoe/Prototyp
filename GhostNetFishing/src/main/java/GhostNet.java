@@ -10,32 +10,39 @@ public class GhostNet {
     private UUID ghostNetId;
 
     @Column(nullable = false)
-    private String latitude;
-
-    @Column(nullable = false)
-    private String longitude;
-
-    @Column(nullable = false)
     private int size;
 
     @Column(nullable = false)
     private GhostNetStatus status;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "reportingUserId", nullable = false)
-    private Person reportedBy;
+    @ManyToOne
+    @JoinColumn(name = "locationId", nullable = false)
+    private Location location;
 
     @ManyToOne
-    @JoinColumn(name = "recoveringAnnouncedUserId")
-    private Person recoveringAnnouncedBy;
+    @JoinColumn(name = "reportingUserId")
+    private ReportingPerson reportedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "recovererUserId")
+    private RecoveringPerson recoveringPerson;
+
+    @ManyToOne
+    @JoinColumn(name = "announcedLostUserId")
+    private Person announcedLostBy;
 
 
     public GhostNet() {
     }
 
-    public GhostNet(String latitude, String longitude, int size, GhostNetStatus status, Person reportedBy) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public GhostNet(Location location, int size, GhostNetStatus status) {
+        this.location = location;
+        this.size = size;
+        this.status = status;
+    }
+
+    public GhostNet(Location location, int size, GhostNetStatus status, ReportingPerson reportedBy) {
+        this.location = location;
         this.size = size;
         this.status = status;
         this.reportedBy = reportedBy;
@@ -49,20 +56,12 @@ public class GhostNet {
         this.ghostNetId = ghostNetId;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public int getSize() {
@@ -81,19 +80,27 @@ public class GhostNet {
         this.status = status;
     }
 
-    public Person getReportedBy() {
+    public ReportingPerson getReportedBy() {
         return reportedBy;
     }
 
-    public void setReportedBy(Person reportedBy) {
+    public void setReportedBy(ReportingPerson reportedBy) {
         this.reportedBy = reportedBy;
     }
 
-    public Person getRecoveringAnnouncedBy() {
-        return recoveringAnnouncedBy;
+    public RecoveringPerson getRecoveringPerson() {
+        return recoveringPerson;
     }
 
-    public void setRecoveringAnnouncedBy(Person recoveringAnnouncedBy) {
-        this.recoveringAnnouncedBy = recoveringAnnouncedBy;
+    public void setRecoveringPerson(RecoveringPerson recoveringPerson) {
+        this.recoveringPerson = recoveringPerson;
+    }
+
+    public Person getAnnouncedLostBy() {
+        return announcedLostBy;
+    }
+
+    public void setAnnouncedLostBy(Person announcedLostBy) {
+        this.announcedLostBy = announcedLostBy;
     }
 }
