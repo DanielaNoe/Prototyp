@@ -161,15 +161,10 @@ public class GhostNetDAO {
 
         switch(status) {
             case RECOVERING_ANNOUNCED:
-                query.select(root).where(criteriaBuilder.and(
-                                criteriaBuilder.equal(root.get("status"), status),
-                                criteriaBuilder.equal(root.get("recoveringAnnouncedBy").get("userId"), userId)))
-                        .orderBy(criteriaBuilder.desc(root.get("size")));
-                break;
             case RECOVERED:
                 query.select(root).where(criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("status"), status),
-                                criteriaBuilder.equal(root.get("recoveredBy").get("userId"), userId)))
+                                criteriaBuilder.equal(root.get("recoveringPerson").get("userId"), userId)))
                         .orderBy(criteriaBuilder.desc(root.get("size")));
                 break;
             case LOST:
